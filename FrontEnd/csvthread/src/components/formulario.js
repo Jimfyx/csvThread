@@ -43,13 +43,32 @@ function UploadForm(){
     };
 
     return (
-        <div class=' '  >
-            <form onSubmit={handleSubmit}>
-                <div class='mb-3'>
-                    <label for='handleFile' class='form-label'>Cargar archivo csv:</label>
-                    <input class='form-control' id='handleFile' type='file' accept='.csv' onChange={handleFileChange}></input>
-                </div>
-            </form>
+        <div class='container text-center mb-4 border border-dark ' style={{ minWidth: '290px'}} >
+            <div class='container text-center' style={{maxWidth:'90%'}}>
+                <form onSubmit={handleSubmit}>
+                    <div class='container justify-content-center row mb-3'>
+                        <div class='col-4'>
+                            <label for='handleFile' class='form-label'>Cargar archivo csv:</label>
+                            <input class='form-control' id='handleFile' type='file' accept='.csv' onChange={handleFileChange}></input>
+                        </div>
+                    </div>
+                    <div class='container justify-content-center row mb-3 '>
+                        <div class='col-4'>
+                            <label for='handleProducer' class='form-label'>Ingrese numero de procesos productores:</label>
+                            <input class='form-control' id='handleProducer' type='number' onChange={handleProducerChange}></input>
+                        </div>
+                        <div class='col-4 '>
+                            <label for='handleConsumer' class='form-label'>Ingrese numero de procesos consumidores:</label>
+                            <input class='form-control' id='handleConsumer' type='number' onChange={handleConsumerChange}></input>
+                        </div>
+                    </div>
+                    <div class='container justify-content-center row mb-3'>
+                        <div class='col-3'>
+                            <button type='submit'>Enviar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
     )
 }
