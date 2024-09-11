@@ -6,12 +6,16 @@ import org.springframework.stereotype.Service;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.time.LocalTime;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 @Service
 public class ProducerService implements Runnable {
 
     private final BufferCompartido buffer;
     private final String rutaArchivo;
+    private static final Lock fileLock = new ReentrantLock();
 
     public ProducerService(BufferCompartido buffer, String rutaArchivo) {
         this.buffer = buffer;
@@ -20,14 +24,24 @@ public class ProducerService implements Runnable {
 
     @Override
     public void run() {
-        try(BufferedReader lector = new BufferedReader(
-                new InputStreamReader(getClass().getClassLoader().getResourceAsStream(rutaArchivo)))) {
+        try{
+
+            BufferedReader lector = new BufferedReader(
+                new InputStreamReader(getClass().getClassLoader().getResourceAsStream(rutaArchivo)));
             String linea;
             while ((linea = lector.readLine()) != null) {
-                String mensaje = linea + "," + Thread.currentThread().getName();
-                buffer.producir(mensaje);
-                System.out.println("Producido: " + Thread.currentThread().getName() + ":" + mensaje);
-                Thread.sleep((int) (Math.random() * 1000));
+                try {
+                    fileLock.lock();
+                    LocalTime started_time = LocalTime.now();
+
+                    String mensaje = linea + "," + Thread.currentThread().getName() + "," + started_time;
+                    buffer.producir(mensaje);
+                    System.out.println("Producido: " + mensaje);
+                    //Thread.sleep((int) (Math.random() * 1000));
+
+                } finally {
+                    fileLock.unlock();
+                }
 
             }
         }catch (IOException | InterruptedException e){

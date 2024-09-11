@@ -6,8 +6,9 @@ import com.thread.cdr.repository.CallHistoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.Duration;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -38,15 +39,18 @@ public class ConsumerService implements Runnable {
                 }
                 lock.lock();
                 try {
+
                     String[] parts = mensaje.split(",",9);
                     if(parts.length == 9){
+
                         String account = parts[0];
                         String origen = parts[1];
                         String destiny = parts[2];
 
-                        LocalTime date_time;
+                        LocalDateTime date_time;
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
                         try {
-                            date_time = LocalTime.parse(parts[3]);
+                            date_time = LocalDateTime.parse(parts[3],formatter);
                         } catch (DateTimeParseException e) {
                             System.err.println("Error al obtener la fecha y hora: " + e.getMessage());
                             continue;
@@ -64,13 +68,13 @@ public class ConsumerService implements Runnable {
                             System.err.println("Error al obtener la hora: " + e.getMessage());
                             continue;
                         }
-                        LocalTime hora = LocalTime.now();
-                        Duration time_taked = Duration.between(start_time, hora);
+                        LocalTime date_time_consumed = LocalTime.now();
+
                         CallHistory callHistory = new CallHistory(account, origen, destiny, date_time, duration, price, location,
-                                idProductor, Thread.currentThread().getName(), time_taked, LocalTime.now());
+                                idProductor, Thread.currentThread().getName(), date_time_consumed, LocalTime.now());
                         callHistoryRepository.save(callHistory);
-                        System.out.println("Consumido por: " + Thread.currentThread().getName() + ":" + account + ":"
-                                + origen + ":" + destiny + ":" + date_time);
+                        System.out.println("Consumido por: " + Thread.currentThread().getName() + "," + account + ","
+                                + origen + "," + destiny + "," + date_time);
                     }
                 }finally{
                     lock.unlock();
