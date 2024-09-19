@@ -12,17 +12,22 @@ import java.nio.file.Paths;
 @Service
 public class FileStorageService {
 
-    private final String upDestiny = "../resources/";
+    private final String upDestiny = "upload/";
 
     public String saveFile(MultipartFile file) throws IOException {
         if (file.isEmpty()) {
             throw new IOException("File is empty");
         }
+        File directory = new File(upDestiny);
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         Path path = Paths.get(upDestiny, fileName);
         Files.copy(file.getInputStream(), path);
 
         return fileName;
     }
-    
+
 }

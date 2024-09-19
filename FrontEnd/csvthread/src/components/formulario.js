@@ -15,7 +15,7 @@ function UploadForm(){
     useEffect(() => {
         const socket = new SockJS('http://localhost:8084/ws');
         const client = new Client({
-            brokerURL: 'ws://localhost:8080/ws',
+            brokerURL: 'ws://localhost:8084/ws',
             connectHeaders: {},
             debug: (str) => console.log(str),
             onConnect: () => {
@@ -70,13 +70,14 @@ function UploadForm(){
         }
 
         try {
-            const response = await fetch('http://localhost:3306/upload', {
+            const response = await fetch('http://localhost:8084/api/v1/upload', {
                 method: 'POST',
                 body: formData,
             });
 
             if (response.ok) {
                 setFormDisabled(true);
+                setButtonEnabled(true);
                 alert('Archivo subido exitosamente');
                 socketClient.send('/app/db/write', {}, 'Datos cargados correctamente')
             } else {
@@ -88,6 +89,23 @@ function UploadForm(){
         }
     };
 
+    const handleProcess = async () => {
+        try {
+            const response = await fetch('http://localhost:8084/api/v1/proccess', {
+                method: 'GETT',
+            });
+    
+            if (response.ok) {
+                alert('Procesamiento iniciado exitosamente');
+                socketClient.send('/app/db/write', {}, 'Procesamiento en curso...');
+            } else {
+                alert('Error al iniciar el procesamiento');
+            }
+        } catch (error) {
+            console.log('Error al iniciar el procesamiento: ', error);
+            alert('Error en el procesamiento en el servidor');
+        }
+    };
 
 
     return (
@@ -119,7 +137,7 @@ function UploadForm(){
                 {
                 <div class='container justify-content-center row mb-3'>
                     <div class='col-3'>
-                        <button onClick={handleProcess} enabled={buttonEnabled}>Procesar</button>
+                        <button onClick={handleProcess} disabled={!buttonEnabled}>Procesar</button>
                     </div>
                 </div>  
                 }

@@ -1,11 +1,9 @@
 package com.thread.cdr.service;
 
+import com.thread.cdr.BufferCarga;
 import com.thread.cdr.BufferCompartido;
 import org.springframework.stereotype.Service;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.time.LocalTime;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -14,44 +12,40 @@ import java.util.concurrent.locks.ReentrantLock;
 public class ProducerService implements Runnable {
 
     private final BufferCompartido buffer;
-    private final String rutaArchivo;
-    private static final Lock fileLock = new ReentrantLock();
+    private final BufferCarga bufferCarga;
+    private final String idProductor;
+    private static final Lock lock = new ReentrantLock();
 
-    public ProducerService(BufferCompartido buffer, String rutaArchivo) {
+    public ProducerService(BufferCompartido buffer, BufferCarga bufferCarga, String idProductor) {
         this.buffer = buffer;
-        this.rutaArchivo = rutaArchivo;
+        this.bufferCarga = bufferCarga;
+        this.idProductor = idProductor;
     }
 
     @Override
     public void run() {
         try{
 
-            BufferedReader lector = new BufferedReader(
-                new InputStreamReader(getClass().getClassLoader().getResourceAsStream(rutaArchivo)));
+            BufferCarga lector = bufferCarga;
             String linea;
-            while ((linea = lector.readLine()) != null) {
+            while ((linea = lector.consumir()) != null) {
                 try {
-                    fileLock.lock();
+                    lock.lock();
                     LocalTime started_time = LocalTime.now();
 
-                    String mensaje = linea + "," + Thread.currentThread().getName() + "," + started_time;
+                    String mensaje = linea + "," + idProductor + "," + started_time;
                     buffer.producir(mensaje);
                     System.out.println("Producido: " + mensaje);
                     //Thread.sleep((int) (Math.random() * 1000));
 
                 } finally {
-                    fileLock.unlock();
+                    lock.unlock();
                 }
 
             }
-        }catch (IOException | InterruptedException e){
+        }catch (InterruptedException e){
             Thread.currentThread().interrupt();
-        }finally {
-            try{
-                buffer.producir("End, " + Thread.currentThread().getName());
-            }catch (InterruptedException e){
-                Thread.currentThread().interrupt();
-            }
+        }
         }
     }
-}
+

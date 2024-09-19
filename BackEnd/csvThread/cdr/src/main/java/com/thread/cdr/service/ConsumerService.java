@@ -3,7 +3,6 @@ package com.thread.cdr.service;
 import com.thread.cdr.BufferCompartido;
 import com.thread.cdr.model.CallHistory;
 import com.thread.cdr.repository.CallHistoryRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -16,15 +15,15 @@ import java.util.concurrent.locks.ReentrantLock;
 @Service
 public class ConsumerService implements Runnable {
     private  final BufferCompartido buffer;
-
     private final CallHistoryRepository callHistoryRepository;
+    private final String idConsumidor;
 
     private static final Lock lock = new ReentrantLock();
 
-    @Autowired
-    public ConsumerService(BufferCompartido buffer, CallHistoryRepository callHistoryRepository) {
+    public ConsumerService(BufferCompartido buffer, CallHistoryRepository callHistoryRepository, String idConsumidor) {
         this.buffer = buffer;
         this.callHistoryRepository = callHistoryRepository;
+        this.idConsumidor = idConsumidor;
     }
 
     @Override
@@ -32,11 +31,6 @@ public class ConsumerService implements Runnable {
         try {
             while (true){
                 String mensaje = buffer.consumir();
-
-                if(mensaje.startsWith("End")){
-                    System.out.println("Finalizado");
-                    break;
-                }
                 lock.lock();
                 try {
 
@@ -71,9 +65,9 @@ public class ConsumerService implements Runnable {
                         LocalTime date_time_consumed = LocalTime.now();
 
                         CallHistory callHistory = new CallHistory(account, origen, destiny, date_time, duration, price, location,
-                                idProductor, Thread.currentThread().getName(), date_time_consumed, LocalTime.now());
+                                idProductor, idConsumidor, date_time_consumed, LocalTime.now());
                         callHistoryRepository.save(callHistory);
-                        System.out.println("Consumido por: " + Thread.currentThread().getName() + "," + account + ","
+                        System.out.println("Consumido por: " + idConsumidor + "," + account + ","
                                 + origen + "," + destiny + "," + date_time);
                     }
                 }finally{
