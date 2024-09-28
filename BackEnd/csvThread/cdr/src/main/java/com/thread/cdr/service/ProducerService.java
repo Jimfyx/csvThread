@@ -36,7 +36,7 @@ public class ProducerService implements Runnable {
                     String mensaje = linea + "," + idProductor + "," + started_time;
                     buffer.producir(mensaje);
                     System.out.println("Producido: " + mensaje);
-                    //Thread.sleep((int) (Math.random() * 1000));
+                    //Thread.sleep((int) (Math.random() * 6000));
 
                 } finally {
                     lock.unlock();

@@ -85,14 +85,13 @@ function UploadForm(){
             }
         } catch (error) {
             console.log('Error al subir el archivo: ', error);
-            alert('Error en la carga del archivo al servidor');
         }
     };
 
     const handleProcess = async () => {
         try {
             const response = await fetch('http://localhost:8084/api/v1/proccess', {
-                method: 'GETT',
+                method: 'GET',
             });
     
             if (response.ok) {
@@ -103,7 +102,6 @@ function UploadForm(){
             }
         } catch (error) {
             console.log('Error al iniciar el procesamiento: ', error);
-            alert('Error en el procesamiento en el servidor');
         }
     };
 

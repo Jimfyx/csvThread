@@ -7,12 +7,14 @@ import com.thread.cdr.service.ExecuteService;
 import com.thread.cdr.service.FileStorageService;
 import org.apache.catalina.connector.Response;
 import com.thread.cdr.service.LoadFileService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
-
+@CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/v1")
 public class CdrController {
@@ -79,5 +81,15 @@ public class CdrController {
     public String clear() {
         bufferCarga.vaciar();
         return "Listo para carga de archivo.";
+    }
+
+    @GetMapping("/find")
+    public ResponseEntity<String> find(@RequestParam("account") String account) {
+        Double totalCost = callHistoryRepository.totalCost(account);
+            if (totalCost == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontraron coincidencias.");
+            } else {
+                return ResponseEntity.status(HttpStatus.OK).body("El costo total para la cuenta " + account + " es: " + totalCost);
+            }
     }
 }

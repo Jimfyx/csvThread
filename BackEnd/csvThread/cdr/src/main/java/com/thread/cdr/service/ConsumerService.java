@@ -53,7 +53,10 @@ public class ConsumerService implements Runnable {
                         Integer duration = Integer.valueOf(parts[4]);
                         Float price = Float.valueOf(parts[5]);
                         String location = parts[6];
+                        Float totalCost = duration * price;
                         String idProductor = parts[7];
+
+                        //Thread.sleep((int) (Math.random() * 6000));
 
                         LocalTime start_time;
                         try {
@@ -65,7 +68,7 @@ public class ConsumerService implements Runnable {
                         LocalTime date_time_consumed = LocalTime.now();
 
                         CallHistory callHistory = new CallHistory(account, origen, destiny, date_time, duration, price, location,
-                                idProductor, idConsumidor, date_time_consumed, LocalTime.now());
+                                totalCost, idProductor, idConsumidor, start_time, date_time_consumed);
                         callHistoryRepository.save(callHistory);
                         System.out.println("Consumido por: " + idConsumidor + "," + account + ","
                                 + origen + "," + destiny + "," + date_time);

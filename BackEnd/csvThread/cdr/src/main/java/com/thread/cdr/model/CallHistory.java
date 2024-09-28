@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
@@ -41,6 +40,9 @@ public class CallHistory {
     @Column(name = "location", length = 20)
     private String location;
 
+    @Column(name = "totalCost", length = 5)
+    private float totalCost;
+
     @Column(name = "procesed_by", length = 20)
     private String procesed_by;
 
@@ -53,8 +55,10 @@ public class CallHistory {
     @Column(name = "date_time_consumed", length = 20)
     private LocalTime date_time_consumed;
 
+
+
     public CallHistory(String account, String origen, String destiny, LocalDateTime date_time, int duration, float price,
-                       String location, String procesed_by, String consumed_by, LocalTime date_time_added, LocalTime date_time_consumed) {
+                       String location, float totalCost, String procesed_by, String consumed_by, LocalTime date_time_added, LocalTime date_time_consumed) {
         this.account = account;
         this.origen = origen;
         this.destiny = destiny;
@@ -62,6 +66,7 @@ public class CallHistory {
         this.duration = duration;
         this.price = price;
         this.location = location;
+        this.totalCost = totalCost;
         this.procesed_by = procesed_by;
         this.consumed_by = consumed_by;
         this.date_time_added = date_time_added;
