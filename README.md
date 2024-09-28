@@ -2,7 +2,7 @@
 
 # Descripción del proyecto
 - Se requiere implementar un sistema de procesamiento de registros de detalle de llamadas (CDR) utilizando hilos en Java. El objetivo es simular un sistema que procese grandes volúmenes de datos de llamadas telefónicas, utilizando el patrón productor-consumidor para manejar la concurrencia y la sincronización entre hilos.
-Entrada de datos
+- Entrada de datos
 Los datos de entrada serán registros de detalle de llamadas (CDR) almacenados en un archivo CSV. Cada línea del archivo contiene la siguiente información, separada por comas:
 •	Número de cuenta
 •	Número del que llama
@@ -13,14 +13,14 @@ Los datos de entrada serán registros de detalle de llamadas (CDR) almacenados e
 •	Tipo de llamada si es local, nacional o internacional
 Ejemplo de una línea de entrada:
 •	12345,555-1234,555-5478,1627846327,10,0.17,local
-Funcionalidad básica a implementar:
+- Funcionalidad básica a implementar:
 •	CDR: Representar un registro de llamada con atributos como numero de cuenta, numero del que llama, numero al que se llama, timestamp y duración en minutos.
 •	CDRProducer: Leer los registros del archivo CSV y ponerlos en una cola para ser procesados por los consumidores.
 •	CDRConsumer: Tomar los registros de la cola, procesarlos y calcular el total de minutos hablados y la tarifa total por cada número de cuenta.
 •	Sincronizacion: Implementar la sincronización adecuada para manejar la concurrencia entre los productores y consumidores.
 •	Almacenamiento de datos: se debe crear una estructura de datos que permita almacenar el detalle de cada CDR consumido. La estructura es definida por el estudiante.
 •	Resumen de resultados en UI: Al finalizar el procesamiento, imprimir en pantalla un resumen que muestre el total de minutos hablados y la tarifa total para cada numero de cuenta. Se puede utilizar los controles de interfaz que considere.
-Requisitos funcionales:
+- Requisitos funcionales:
 •	Por cada proceso producto se debe de levantar, como mínimo, 3 hilos.
 •	Por cada proceso consumidor se debe de levantar, como mínimo, 2 hilos.
 •	La aplicación debe de contar con una interfaz gráfica.
@@ -30,12 +30,12 @@ El proyecto debe contar como mínimo con las clases:
 •	Clase CDR: Clase orquestadora del aplicativo.
 •	Clase CDRProducer: Productor de los CDR.
 •	Clase CDRConsumer: Consumidor de los CDR.
-Requisitos técnicos:
+- Requisitos técnicos:
 •	Utilizar Java 8 o superior. 
 •	Utiliza MySQL. 
 •	Implementar el manejo adecuado de excepciones. 
 •	Asegurarse de que el programa maneja correctamente la sincronización y concurrencia entre hilos.
-Diseño e implementación
+# Diseño e implementación
 Se utiliza una arquitectura en capas también conocida como arquitectura N capas o multicapas, ya que, es una de las arquitecturas de software más utilizadas debido a sus múltiples beneficios, de los cuales podemos mencionar:
 Separación de responsabilidades.
 Mantenibilidad.
