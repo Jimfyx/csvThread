@@ -1,7 +1,7 @@
 # csvThread
 
-Descripción del proyecto
-Se requiere implementar un sistema de procesamiento de registros de detalle de llamadas (CDR) utilizando hilos en Java. El objetivo es simular un sistema que procese grandes volúmenes de datos de llamadas telefónicas, utilizando el patrón productor-consumidor para manejar la concurrencia y la sincronización entre hilos.
+# Descripción del proyecto
+- Se requiere implementar un sistema de procesamiento de registros de detalle de llamadas (CDR) utilizando hilos en Java. El objetivo es simular un sistema que procese grandes volúmenes de datos de llamadas telefónicas, utilizando el patrón productor-consumidor para manejar la concurrencia y la sincronización entre hilos.
 Entrada de datos
 Los datos de entrada serán registros de detalle de llamadas (CDR) almacenados en un archivo CSV. Cada línea del archivo contiene la siguiente información, separada por comas:
 •	Número de cuenta
